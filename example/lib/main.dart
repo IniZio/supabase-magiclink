@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
-  await Supabase.initialize(url: 'SUPABASE_URL', anonKey: 'SUPABASE_ANON_KEY');
+  await Supabase.initialize(url: 'https://knphfeplvrmhsbghyeaj.supabase.co', anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYxODA0NjE0MiwiZXhwIjoxOTMzNjIyMTQyfQ._Mgsk1kZAuk7Wcr66gkK4PVcmHA1byaR89gjVgmtjGk');
   runApp(const MyApp());
 }
 
@@ -87,11 +87,11 @@ class _LoginFormState extends State<_LoginForm> {
                 decoration: const InputDecoration(label: Text('Email')),
               ),
               const SizedBox(height: 16),
-              TextFormField(
-                obscureText: true,
-                controller: _passwordController,
-                decoration: const InputDecoration(label: Text('Password')),
-              ),
+              // TextFormField(
+              //   obscureText: true,
+              //   controller: _passwordController,
+              //   decoration: const InputDecoration(label: Text('Password')),
+              // ),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () async {
@@ -100,10 +100,9 @@ class _LoginFormState extends State<_LoginForm> {
                   });
                   try {
                     final email = _emailController.text;
-                    final password = _passwordController.text;
-                    await Supabase.instance.client.auth.signInWithPassword(
+                    // final password = _passwordController.text;
+                    await Supabase.instance.client.auth.signInWithOtp(
                       email: email,
-                      password: password,
                     );
                   } catch (e) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -181,7 +180,7 @@ class _ProfileFormState extends State<_ProfileForm> {
           .match({'id': userId}).maybeSingle()) as Map?;
       if (data != null) {
         setState(() {
-          _usernameController.text = data['username'];
+          _usernameController.text = Supabase.instance.client.auth.currentUser!.email!;
           _websiteController.text = data['website'];
         });
       }
